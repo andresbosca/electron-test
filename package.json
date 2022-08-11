@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx renderer"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.26",
