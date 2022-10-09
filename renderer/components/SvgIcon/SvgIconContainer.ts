@@ -1,17 +1,18 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SvgContainer = styled.div<{
-  height?: number
-  width?: number
+  height?: number;
+  width?: number;
 }>`
-  height: "auto";
-  width: "auto";
+  height: 'auto';
+  width: 'auto';
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   & svg {
-    height: ${props => (props.height ? `${props.height}px` : "100%")};
-    width: ${props => (props.width ? `${props.width}px` : "100%")};
+    height: ${(props) => (props.height ? `${props.height}px` : '100%')};
+    width: ${(props) => (props.width ? `${props.width}px` : '100%')};
   }
-`
+`;

@@ -12,9 +12,13 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx renderer"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.4",
+    "@emotion/react": "11",
+    "@emotion/styled": "11",
     "@types/styled-components": "^5.1.26",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
+    "framer-motion": "6",
     "react-icons": "^4.4.0",
     "styled-components": "^5.3.5"
   },
@@ -23,7 +27,7 @@
     "@types/react": "^18.0.8",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
-    "electron": "^18.2.0",
+    "electron": "^18.2.*",
     "electron-builder": "^23.0.3",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
