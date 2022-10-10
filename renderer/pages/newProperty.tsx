@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   HStack,
+  Input,
   Stack,
   Text,
   useRadioGroup,
@@ -74,38 +75,37 @@ const NewProperty: React.FC = () => {
 
   return (
     <SidebarWithHeader>
-      <Container maxW="container.xl" backgroundColor="gray.300" centerContent>
+      <Container borderWidth="1px" maxW="container.xl" backgroundColor="gray.300" centerContent>
         <Head>
           <title>Add Property</title>
         </Head>
         <Box padding="50px">
           <Text fontSize={'5xl'}>Adicionar Imóvel</Text>
-          <Stack direction="row" h="25px" p={1}>
-            <Divider orientation="horizontal" />
-          </Stack>
-          <Box p="6">
-            <Flex {...group}>
+          <Divider orientation="horizontal" />
+          <Box display="flex" alignItems="baseline">
+            <HStack {...group}>
               {options.map((values) => {
                 const radio = getRadioProps({ value: values.value });
                 return (
-                  <Categories key={values.value} {...radio}>
-                    <div>{values.image}</div>
-                  </Categories>
+                  <Box p="6">
+                    <Categories key={values.value} {...radio}>
+                      <div>{values.image}</div>
+                    </Categories>
+                  </Box>
                 );
               })}
-            </Flex>
+            </HStack>
           </Box>
-          <Box backgroundColor="red">
-            <Text fontSize={'2xl'}>Informações do Imóvel</Text>
-            <Stack direction="row" h="100px" p={4} backgroundColor="black">
-              <Divider orientation="vertical" />
-              <Text align="left">Nome do Imóvel</Text>
-              <input
+          <Box>
+            <Box display="flex" flexDir="column">
+              <Input
                 type="text"
                 value={property.name}
+                placeholder="Nome do Imóvel"
                 onChange={(e) => setProperty({ ...property, name: e.target.value })}
               />
-            </Stack>
+              <Input type="text" />
+            </Box>
           </Box>
         </Box>
       </Container>
