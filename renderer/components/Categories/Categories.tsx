@@ -12,7 +12,7 @@ const Categories: React.FC<CategoriesProps> = (props) => {
   const checkbox = getCheckboxProps();
 
   return (
-    <Box as="label">
+    <Box as="label" p="6">
       <input {...input} />
       <Box
         {...checkbox}

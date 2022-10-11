@@ -75,38 +75,32 @@ const NewProperty: React.FC = () => {
 
   return (
     <SidebarWithHeader>
-      <Container borderWidth="1px" maxW="container.xl" backgroundColor="gray.300" centerContent>
-        <Head>
-          <title>Add Property</title>
-        </Head>
-        <Box padding="50px">
-          <Text fontSize={'5xl'}>Adicionar Imóvel</Text>
+      <Head>
+        <title>Add Property</title>
+      </Head>
+      <Container borderWidth="1px" maxW="container.xl" backgroundColor="gray.200" centerContent>
+        <Box padding="20px">
+          <Text fontSize="5xl">Adicionar Imóvel</Text>
           <Divider orientation="horizontal" />
-          <Box display="flex" alignItems="baseline">
-            <HStack {...group}>
+          <Box bg="red">
+            <HStack {...group} alignItems="center">
               {options.map((values) => {
                 const radio = getRadioProps({ value: values.value });
                 return (
-                  <Box p="6">
-                    <Categories key={values.value} {...radio}>
-                      <div>{values.image}</div>
-                    </Categories>
-                  </Box>
+                  <Categories key={values.value} {...radio}>
+                    <div>{values.image}</div>
+                  </Categories>
                 );
               })}
             </HStack>
           </Box>
-          <Box>
-            <Box display="flex" flexDir="column">
-              <Input
-                type="text"
-                value={property.name}
-                placeholder="Nome do Imóvel"
-                onChange={(e) => setProperty({ ...property, name: e.target.value })}
-              />
-              <Input type="text" />
-            </Box>
-          </Box>
+          <Input
+            type="text"
+            value={property.name}
+            placeholder="Nome do Imóvel"
+            onChange={(e) => setProperty({ ...property, name: e.target.value })}
+          />
+          <Input type="text" />
         </Box>
       </Container>
     </SidebarWithHeader>
