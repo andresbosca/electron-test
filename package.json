@@ -17,6 +17,7 @@
     "@emotion/styled": "11",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.1.2",
+    "date-fns": "^2.29.3",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "framer-motion": "6",

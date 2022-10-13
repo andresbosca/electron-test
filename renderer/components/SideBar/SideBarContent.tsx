@@ -7,7 +7,12 @@ interface LinkItemProps {
   name: string;
   icon: IconType;
   href: string;
+  callback?: () => void;
 }
+
+const handleLogout = () => {
+  localStorage.removeItem('token');
+};
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, href: '/home' },
@@ -16,7 +21,7 @@ const LinkItems: Array<LinkItemProps> = [
   // { name: 'Explore', icon: FiCompass, href: '/home' },
   // { name: 'Favourites', icon: FiStar, href: '/home' },
   // { name: 'Settings', icon: FiSettings, href: '/home' },
-  { name: 'Logout', icon: FiSettings, href: '/login' },
+  { name: 'Logout', icon: FiSettings, href: '/login', callback: handleLogout },
 ];
 
 const SidebarContent = ({ ...rest }) => {
@@ -36,8 +41,8 @@ const SidebarContent = ({ ...rest }) => {
           Logo
         </Text>
       </Flex>
-      {LinkItems.map(({ name, icon, href }) => (
-        <NavItem key={name} icon={icon} href={href}>
+      {LinkItems.map(({ name, icon, href, callback }) => (
+        <NavItem key={name} icon={icon} href={href} onClick={callback}>
           {name}
         </NavItem>
       ))}

@@ -27,77 +27,14 @@ import Categories from '../components/Categories/Categories';
 import SidebarWithHeader from '../components/SideBar';
 import brazilStates from '../domain/brazilStates';
 import formatCep from '../domain/cepFormatter';
-
-interface NewPropertyProps {
-  name: string;
-  address: string;
-  number: number;
-  city: string;
-  state: string;
-  zip: string;
-  bedrooms: number;
-  bathrooms: number;
-  squareFeet: number;
-  price: number;
-  garage: number;
-  description: string;
-}
-
-const INITITAL_STATE: NewPropertyProps = {
-  name: '',
-  address: '',
-  number: null,
-  city: '',
-  state: '',
-  zip: '',
-  bedrooms: null,
-  bathrooms: null,
-  squareFeet: null,
-  price: null,
-  garage: null,
-  description: '',
-};
-
-interface LeaseValue {
-  rent: string;
-  securityDeposit: string;
-  leaseDuration: string;
-}
-
-const INITIAL_LEASE_VALUE: LeaseValue = {
-  rent: '0',
-  securityDeposit: '0',
-  leaseDuration: '0',
-};
-
-interface Amenity {
-  name: string;
-  value: boolean;
-}
-
-const amenities: Amenity[] = [
-  { name: 'Air Conditioning', value: false },
-  { name: 'Attic', value: false },
-  { name: 'Balcony', value: false },
-  { name: 'Basement', value: false },
-  { name: 'Cable Ready', value: false },
-  { name: 'Ceiling Fan(s)', value: false },
-  { name: 'Dishwasher', value: false },
-  { name: 'Fireplace', value: false },
-  { name: 'Furnished', value: false },
-  { name: 'Garbage Disposal', value: false },
-  { name: 'Hardwood Floors', value: false },
-  { name: 'Microwave', value: false },
-  { name: 'New / Renovated Interior', value: false },
-  { name: 'Oversized Closets', value: false },
-  { name: 'Pool', value: false },
-  { name: 'Security System', value: false },
-  { name: 'Smoke Free', value: false },
-  { name: 'Some Paname Utilities', value: false },
-  { name: 'Washer / Dryer In Unit', value: false },
-  { name: 'Wheelchair Access', value: false },
-  { name: 'Yard', value: false },
-];
+import {
+  amenities,
+  Amenity,
+  INITIAL_LEASE_VALUE,
+  INITITAL_STATE,
+  LeaseValue,
+  NewProperty,
+} from '../domain/property';
 
 interface Option {
   value: string;
@@ -110,7 +47,7 @@ const options: Option[] = [
 ];
 
 const NewProperty: React.FC = () => {
-  const [property, setProperty] = useState<NewPropertyProps>(INITITAL_STATE);
+  const [property, setProperty] = useState<NewProperty>(INITITAL_STATE);
   const [lease, setLease] = useState<LeaseValue>(INITIAL_LEASE_VALUE);
   const [amenitiesState, setAmenitiesState] = useState<Amenity[]>(amenities);
   const [buttonPressed, setButtonPressed] = useState(false);
@@ -121,11 +58,14 @@ const NewProperty: React.FC = () => {
     if (validateForm()) {
       console.log('Formulário válido');
       console.log(property);
+      console.log(lease);
+      console.log(radioValue);
       router.push('/home');
     }
     setButtonPressed(true);
     console.log(property);
     console.log(buttonPressed);
+
     console.log('BAAAD');
   };
 
@@ -195,7 +135,7 @@ const NewProperty: React.FC = () => {
           </Box>
           <Grid
             marginTop="10"
-            h="170px"
+            h="120px"
             templateRows="repeat(4,1fr)"
             templateColumns="repeat(12, 1fr)"
             gap={4}
@@ -294,7 +234,8 @@ const NewProperty: React.FC = () => {
               />
             </GridItem>
           </Grid>
-          <Grid h="170px" templateRows="repeat(5,1fr)" templateColumns="repeat(12, 1fr)" gap={4}>
+          <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
+          <Grid h="120px" templateRows="repeat(5,1fr)" templateColumns="repeat(12, 1fr)" gap={4}>
             <GridItem rowSpan={3} colSpan={4} textAlign="left">
               <Box width="min-content">
                 <FaMapMarkedAlt fontSize="50px" />
@@ -393,107 +334,116 @@ const NewProperty: React.FC = () => {
               />
             </GridItem>
           </Grid>
+
           {leaseState && (
-            <Grid h="150px" templateRows="repeat(2,1fr)" templateColumns="repeat(18, 1fr)" gap={4}>
-              <GridItem rowSpan={2} colSpan={6} textAlign="left">
-                <Box width="min-content">
-                  <FaFileInvoiceDollar fontSize="50px" />
-                </Box>
-                <Text fontSize="2xl" flex="1">
-                  Locação
-                </Text>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <Text fontSize="md" flex="1">
-                  Valor do aluguel
-                </Text>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <Text fontSize="md" flex="1">
-                  Valor do Adiantamento
-                </Text>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <Text fontSize="md" flex="1">
-                  Duração do contrato
-                </Text>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    fontSize="1.2em"
-                    children="$"
-                  />
-                  <Input
-                    bg="gray.100"
-                    borderRadius={'md'}
-                    variant="flushed"
-                    type="text"
-                    value={new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    }).format(Number.parseFloat(lease.rent?.replace(/\D/g, '')) / 100)}
-                    placeholder="Aluguel"
-                    _placeholder={{ color: 'gray.500' }}
-                    onChange={(e) =>
-                      setLease((state) => {
-                        return { ...state, rent: e.target.value };
-                      })
-                    }
-                  />
-                </InputGroup>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    fontSize="1.2em"
-                    children="$"
-                  />
-                  <Input
-                    bg="gray.100"
-                    borderRadius={'md'}
-                    variant="flushed"
-                    type="text"
-                    value={new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    }).format(Number.parseFloat(lease.securityDeposit?.replace(/\D/g, '')) / 100)}
-                    placeholder="Aluguel"
-                    _placeholder={{ color: 'gray.500' }}
-                    onChange={(e) =>
-                      setLease((state) => {
-                        return { ...state, securityDeposit: e.target.value };
-                      })
-                    }
-                  />
-                </InputGroup>
-              </GridItem>
-              <GridItem colSpan={4}>
-                <InputGroup>
-                  <Input
-                    paddingLeft="10px"
-                    bg="gray.100"
-                    borderRadius={'md'}
-                    variant="flushed"
-                    type="text"
-                    value={lease.leaseDuration}
-                    placeholder="Aluguel"
-                    _placeholder={{ color: 'gray.500' }}
-                    onChange={(e) =>
-                      setLease((state) => {
-                        return { ...state, leaseDuration: e.target.value };
-                      })
-                    }
-                  />
-                </InputGroup>
-              </GridItem>
-            </Grid>
+            <>
+              <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
+              <Grid
+                h="120px"
+                templateRows="repeat(2,1fr)"
+                templateColumns="repeat(18, 1fr)"
+                gap={4}
+              >
+                <GridItem rowSpan={2} colSpan={6} textAlign="left">
+                  <Box width="min-content">
+                    <FaFileInvoiceDollar fontSize="50px" />
+                  </Box>
+                  <Text fontSize="2xl" flex="1">
+                    Locação
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <Text fontSize="md" flex="1">
+                    Valor do aluguel
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <Text fontSize="md" flex="1">
+                    Valor do Adiantamento
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <Text fontSize="md" flex="1">
+                    Duração do contrato
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input
+                      bg="gray.100"
+                      borderRadius={'md'}
+                      variant="flushed"
+                      type="text"
+                      value={new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(Number.parseFloat(lease.rent?.replace(/\D/g, '')) / 100)}
+                      placeholder="Aluguel"
+                      _placeholder={{ color: 'gray.500' }}
+                      onChange={(e) =>
+                        setLease((state) => {
+                          return { ...state, rent: e.target.value };
+                        })
+                      }
+                    />
+                  </InputGroup>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input
+                      bg="gray.100"
+                      borderRadius={'md'}
+                      variant="flushed"
+                      type="text"
+                      value={new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(Number.parseFloat(lease.securityDeposit?.replace(/\D/g, '')) / 100)}
+                      placeholder="Aluguel"
+                      _placeholder={{ color: 'gray.500' }}
+                      onChange={(e) =>
+                        setLease((state) => {
+                          return { ...state, securityDeposit: e.target.value };
+                        })
+                      }
+                    />
+                  </InputGroup>
+                </GridItem>
+                <GridItem colSpan={4}>
+                  <InputGroup>
+                    <Input
+                      paddingLeft="10px"
+                      bg="gray.100"
+                      borderRadius={'md'}
+                      variant="flushed"
+                      type="text"
+                      value={lease.leaseDuration}
+                      placeholder="Aluguel"
+                      _placeholder={{ color: 'gray.500' }}
+                      onChange={(e) =>
+                        setLease((state) => {
+                          return { ...state, leaseDuration: e.target.value };
+                        })
+                      }
+                    />
+                  </InputGroup>
+                </GridItem>
+              </Grid>
+            </>
           )}
-          <Divider />
+          <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
           <Grid h="300px" templateRows="repeat(6,1fr)" templateColumns="repeat(18, 1fr)" gap={4}>
             <GridItem rowSpan={6} colSpan={6} textAlign="left">
               <Box width="min-content">
@@ -506,7 +456,7 @@ const NewProperty: React.FC = () => {
 
             {amenitiesState.map((amenity) => {
               return (
-                <GridItem colSpan={3}>
+                <GridItem colSpan={3} overflow="hidden">
                   <Checkbox
                     width="sm"
                     colorScheme="green"

@@ -1,10 +1,8 @@
 import Head from 'next/head';
-import SvgIcon from '../components/SvgIcon/SvgIcon';
-import { FaThLarge } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import router from 'next/router';
-import SidebarContent from '../components/SideBar/SideBarContent';
 import SidebarWithHeader from '../components/SideBar';
+import HomeList from '../components/MainList/homeList';
 
 const Home: React.FC = () => {
   const [token, setToken] = useState<string>('');
@@ -21,8 +19,9 @@ const Home: React.FC = () => {
   return (
     <SidebarWithHeader>
       <Head>
-        <title>Home - Nextron (with-typescript)</title>
+        <title>Home - </title>
       </Head>
+      <HomeList />
     </SidebarWithHeader>
   );
 };
