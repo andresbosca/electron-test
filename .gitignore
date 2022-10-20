@@ -1,5 +1,8 @@
-node_modules
-*.log
-.next
-app
-dist
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+.next/
+app/
