@@ -2,6 +2,7 @@ import { Box, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Property } from '../../domain/property';
 import { getHouseData } from '../../domain/getListData';
+import Link from 'next/link';
 
 const Details = () => {
   const [property, setProperty] = useState<Property>(null);
@@ -15,6 +16,7 @@ const Details = () => {
   return (
     <Box>
       <Text>Details</Text>
+      <Link href="/home">home</Link>
     </Box>
   );
 };

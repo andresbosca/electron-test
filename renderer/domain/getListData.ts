@@ -244,24 +244,28 @@ const DEFAULT_DATA: Property[] = [
   },
 ];
 
-const getListData = async (type: string): Promise<Property[]> => {
-  return DEFAULT_DATA;
-  const response = await axios.get('http://localhost:3000/list?type=' + type);
+const getListData = async (type: string, filter: string): Promise<Property[]> => {
+  const response = await axios.get(
+    `http://localhost:8888/api/property?type=${type}&filter=${filter}`,
+  );
+  if (response.data.length === 0) {
+    return DEFAULT_DATA;
+  }
   return response.data;
 };
 
 const getHouseData = async (id: number) => {
-  const response = await axios.get('http://localhost:3000/house/' + id);
+  const response = await axios.get('http://localhost:8888/api/property/' + id);
   return response.data;
 };
 
 const getLeaseValue = async (id) => {
-  const response = await axios.get('http://localhost:3000/leaseValue/' + id);
+  const response = await axios.get('http://localhost:8888/api/leaseValue/' + id);
   return response.data;
 };
 
 const getAmenity = async (id) => {
-  const response = await axios.get('http://localhost:3000/amenity/' + id);
+  const response = await axios.get('http://localhost:8888/api/amenity/' + id);
   return response.data;
 };
 

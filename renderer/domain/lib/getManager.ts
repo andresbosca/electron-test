@@ -1,4 +1,4 @@
-import { AppDataSource } from '../dataSource/data-source';
+import { AppDataSource } from '../data-source/data-source';
 
 const connection = AppDataSource.initialize();
 export const getManager = async () => {

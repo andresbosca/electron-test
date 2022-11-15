@@ -1,9 +1,9 @@
 {
    "private": true,
-   "name": "my-nextron-app",
-   "description": "My application description",
+   "name": "house-of-houses",
+   "description": "Real State online",
    "version": "1.0.0",
-   "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+   "author": "Andres Boscaini",
    "main": "app/background.js",
    "scripts": {
       "dev": "nextron",
@@ -12,9 +12,9 @@
       "lint": "eslint --ext .js,.jsx,.ts,.tsx renderer",
       "typeorm": "typeorm-ts-node-commonjs",
       "start": "ts-node src/index.ts",
-      "genmigration": "yarn typeorm migration:generate C:/Users/Usuario/source/electron-test/renderer/domain/dataSource/migrations -d C:/Users/Usuario/source/electron-test/renderer/domain/dataSource/data-source.ts",
-      "migrate": "yarn typeorm migration:run -d C:/Users/Usuario/source/electron-test/renderer/domain/dataSource/data-source.ts",
-      "unmigrate": "yarn typeorm migration:revert -d C:/Users/Usuario/source/electron-test/renderer/domain/dataSource/data-source.ts"
+      "genmigration": "yarn typeorm migration:generate renderer/domain/data-source/migrations/migrations -d renderer/domain/data-source/data-source.ts",
+      "migrate": "yarn typeorm migration:run -d ./renderer/domain/data-source/data-source.ts",
+      "unmigrate": "yarn typeorm migration:revert -d ./renderer/domain/data-source/data-source.ts"
    },
    "dependencies": {
       "@chakra-ui/react": "^2.3.4",

@@ -13,6 +13,7 @@ import {
   Text,
   useRadioGroup,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import Head from 'next/head';
 import router from 'next/router';
 import { useState } from 'react';
@@ -34,6 +35,8 @@ import {
   INITITAL_STATE,
   LeaseValue,
   NewProperty,
+  Property,
+  SellValue,
 } from '../domain/property';
 
 interface Option {
@@ -48,7 +51,6 @@ const options: Option[] = [
 
 const NewProperty: React.FC = () => {
   const [property, setProperty] = useState<NewProperty>(INITITAL_STATE);
-  const [lease, setLease] = useState<LeaseValue>(INITIAL_LEASE_VALUE);
   const [amenitiesState, setAmenitiesState] = useState<Amenity[]>(amenities);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [leaseState, setLeaseState] = useState(false);
@@ -56,17 +58,35 @@ const NewProperty: React.FC = () => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log('Formulário válido');
-      console.log(property);
-      console.log(lease);
-      console.log(radioValue);
-      router.push('/home');
+      const propertyToSave: NewProperty = {
+        ...property,
+        type: radioValue,
+        sellValue: {
+          totalValue: (
+            Number.parseFloat(property.sellValue?.totalValue?.replace(/\D/g, '')) / 100
+          ).toString(),
+          securityDeposit: (
+            Number.parseFloat(property.sellValue?.securityDeposit?.replace(/\D/g, '')) / 100
+          ).toString(),
+        },
+        leaseValue: {
+          rent: (Number.parseFloat(property.leaseValue?.rent?.replace(/\D/g, '')) / 100).toString(),
+          securityDeposit: (
+            Number.parseFloat(property.leaseValue?.securityDeposit?.replace(/\D/g, '')) / 100
+          ).toString(),
+          leaseDuration: property.leaseValue?.leaseDuration,
+        },
+        imageUrl: 'https://bit.ly/2Z4KKcF',
+        imageAlt: 'Rear view of modern home with pool',
+        amenities: amenitiesState.filter((amenity) => amenity.value),
+      };
+      console.log(propertyToSave);
+      axios.post('/api/property', propertyToSave).then((res) => {
+        console.log(res);
+        router.push('/home');
+      });
     }
     setButtonPressed(true);
-    console.log(property);
-    console.log(buttonPressed);
-
-    console.log('BAAAD');
   };
 
   const handleRadioChange = (value: string) => {
@@ -97,8 +117,7 @@ const NewProperty: React.FC = () => {
       property.address === '' ||
       property.city === '' ||
       !isStateValid ||
-      !isZipValid ||
-      property.description === ''
+      !isZipValid
     ) {
       return false;
     }
@@ -335,7 +354,7 @@ const NewProperty: React.FC = () => {
             </GridItem>
           </Grid>
 
-          {leaseState && (
+          {leaseState ? (
             <>
               <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
               <Grid
@@ -383,12 +402,17 @@ const NewProperty: React.FC = () => {
                       value={new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(Number.parseFloat(lease.rent?.replace(/\D/g, '')) / 100)}
+                      }).format(
+                        Number.parseFloat(property.leaseValue?.rent?.replace(/\D/g, '')) / 100,
+                      )}
                       placeholder="Aluguel"
                       _placeholder={{ color: 'gray.500' }}
                       onChange={(e) =>
-                        setLease((state) => {
-                          return { ...state, rent: e.target.value };
+                        setProperty((state) => {
+                          return {
+                            ...state,
+                            leaseValue: { ...state.leaseValue, rent: e.target.value },
+                          };
                         })
                       }
                     />
@@ -410,12 +434,19 @@ const NewProperty: React.FC = () => {
                       value={new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(Number.parseFloat(lease.securityDeposit?.replace(/\D/g, '')) / 100)}
+                      }).format(
+                        Number.parseFloat(
+                          property.leaseValue?.securityDeposit?.replace(/\D/g, ''),
+                        ) / 100,
+                      )}
                       placeholder="Aluguel"
                       _placeholder={{ color: 'gray.500' }}
                       onChange={(e) =>
-                        setLease((state) => {
-                          return { ...state, securityDeposit: e.target.value };
+                        setProperty((state) => {
+                          return {
+                            ...state,
+                            leaseValue: { ...state.leaseValue, securityDeposit: e.target.value },
+                          };
                         })
                       }
                     />
@@ -429,12 +460,109 @@ const NewProperty: React.FC = () => {
                       borderRadius={'md'}
                       variant="flushed"
                       type="text"
-                      value={lease.leaseDuration}
+                      value={property.leaseValue?.leaseDuration ?? ''}
                       placeholder="Aluguel"
                       _placeholder={{ color: 'gray.500' }}
                       onChange={(e) =>
-                        setLease((state) => {
-                          return { ...state, leaseDuration: e.target.value };
+                        setProperty((state) => {
+                          return {
+                            ...state,
+                            leaseValue: { ...state.leaseValue, leaseDuration: e.target.value },
+                          };
+                        })
+                      }
+                    />
+                  </InputGroup>
+                </GridItem>
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
+              <Grid
+                h="120px"
+                templateRows="repeat(2,1fr)"
+                templateColumns="repeat(18, 1fr)"
+                gap={4}
+              >
+                <GridItem rowSpan={2} colSpan={6} textAlign="left">
+                  <Box width="min-content">
+                    <FaFileInvoiceDollar fontSize="50px" />
+                  </Box>
+                  <Text fontSize="2xl" flex="1">
+                    Venda
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={6}>
+                  <Text fontSize="md" flex="1">
+                    Valor do imóvel
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={6}>
+                  <Text fontSize="md" flex="1">
+                    Valor do Adiantamento
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={6}>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input
+                      bg="gray.100"
+                      borderRadius={'md'}
+                      variant="flushed"
+                      type="text"
+                      value={new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(
+                        Number.parseFloat(property.sellValue?.totalValue?.replace(/\D/g, '')) / 100,
+                      )}
+                      placeholder="Aluguel"
+                      _placeholder={{ color: 'gray.500' }}
+                      onChange={(e) =>
+                        setProperty((state) => {
+                          return {
+                            ...state,
+                            sellValue: { ...state.sellValue, totalValue: e.target.value },
+                          };
+                        })
+                      }
+                    />
+                  </InputGroup>
+                </GridItem>
+                <GridItem colSpan={6}>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input
+                      bg="gray.100"
+                      borderRadius={'md'}
+                      variant="flushed"
+                      type="text"
+                      value={new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(
+                        Number.parseFloat(property.sellValue?.securityDeposit?.replace(/\D/g, '')) /
+                          100,
+                      )}
+                      placeholder="Aluguel"
+                      _placeholder={{ color: 'gray.500' }}
+                      onChange={(e) =>
+                        setProperty((state) => {
+                          return {
+                            ...state,
+                            sellValue: { ...state.sellValue, securityDeposit: e.target.value },
+                          };
                         })
                       }
                     />

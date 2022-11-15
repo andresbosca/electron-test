@@ -42,15 +42,27 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       key={id}
       bg="gray.100"
     >
-      <Image src={imageUrl} alt={imageAlt} height="230px" width="400px" />
+      <Box position="relative">
+        {dateAdded >= subDays(new Date(), 7) && (
+          <Badge
+            borderRadius="full"
+            colorScheme="teal"
+            mr={2}
+            pr="5px"
+            pl="5px"
+            zIndex="1"
+            position="absolute"
+            top="5%"
+            left="3%"
+          >
+            New
+          </Badge>
+        )}
+        <Image src={imageUrl} alt={imageAlt} height="230px" width="400px" />
+      </Box>
 
       <Box p="6">
         <Box alignItems="baseline">
-          {dateAdded >= subDays(new Date(), 7) && (
-            <Badge borderRadius="full" colorScheme="teal" mr={2}>
-              New
-            </Badge>
-          )}
           <Box
             color="gray.500"
             fontWeight="semibold"

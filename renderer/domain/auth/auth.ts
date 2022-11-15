@@ -7,7 +7,7 @@ interface Auth {
   getCurrentUser: () => any;
 }
 
-const API_URL = 'http://localhost:3000/api/auth/';
+const API_URL = 'http://localhost:8888/api/auth/';
 
 const register = (username: string, email: string, password: string) => {
   return axios.post(API_URL + 'signup', {

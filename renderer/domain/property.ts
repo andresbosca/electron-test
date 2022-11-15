@@ -1,4 +1,7 @@
 interface NewProperty {
+  type: string;
+  imageUrl: string;
+  imageAlt: string;
   name: string;
   address: string;
   number: number;
@@ -11,6 +14,10 @@ interface NewProperty {
   price: number;
   garage: number;
   description: string;
+  dateAdded: Date;
+  leaseValue?: LeaseValue;
+  sellValue?: SellValue;
+  amenities: Amenity[];
 }
 
 interface Property {
@@ -31,7 +38,8 @@ interface Property {
   garage: number;
   description: string;
   dateAdded: Date;
-  leaseValue: LeaseValue;
+  leaseValue?: LeaseValue;
+  sellValue?: SellValue;
   amenities: Amenity[];
 }
 
@@ -41,33 +49,17 @@ interface LeaseValue {
   leaseDuration: string;
 }
 
+interface SellValue {
+  totalValue: string;
+  securityDeposit: string;
+}
+
 interface Amenity {
   name: string;
   value: boolean;
 }
 
-const INITITAL_STATE: NewProperty = {
-  name: '',
-  address: '',
-  number: null,
-  city: '',
-  state: '',
-  zip: '',
-  bedrooms: null,
-  bathrooms: null,
-  squareFeet: null,
-  price: null,
-  garage: null,
-  description: '',
-};
-
-const INITIAL_LEASE_VALUE: LeaseValue = {
-  rent: '0',
-  securityDeposit: '0',
-  leaseDuration: '0',
-};
-
-const amenities: Amenity[] = [
+const AMENITIES: Amenity[] = [
   { name: 'Ar Condicionado', value: false },
   { name: 'Sótão', value: false },
   { name: 'Piscina', value: false },
@@ -90,6 +82,39 @@ const amenities: Amenity[] = [
   { name: 'Porão', value: false },
 ];
 
-export { INITITAL_STATE, INITIAL_LEASE_VALUE, amenities };
+const INITIAL_LEASE_VALUE: LeaseValue = {
+  rent: '0',
+  securityDeposit: '0',
+  leaseDuration: '0',
+};
 
-export type { NewProperty, Property, LeaseValue, Amenity };
+const INITIAL_SELL_VALUE: SellValue = {
+  totalValue: '0',
+  securityDeposit: '0',
+};
+
+const INITITAL_STATE: NewProperty = {
+  type: '',
+  imageUrl: '',
+  imageAlt: '',
+  name: '',
+  address: '',
+  number: 0,
+  city: '',
+  state: '',
+  zip: '',
+  bedrooms: 0,
+  bathrooms: 0,
+  squareFeet: 0,
+  price: 0,
+  garage: 0,
+  description: '',
+  dateAdded: new Date(),
+  leaseValue: INITIAL_LEASE_VALUE,
+  sellValue: INITIAL_SELL_VALUE,
+  amenities: AMENITIES,
+};
+
+export { INITITAL_STATE, INITIAL_LEASE_VALUE, INITIAL_SELL_VALUE, AMENITIES as amenities };
+
+export type { NewProperty, Property, LeaseValue, SellValue, Amenity };

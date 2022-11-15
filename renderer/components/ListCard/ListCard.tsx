@@ -10,27 +10,28 @@ const ListCard: React.FC = () => {
   const [list, setList] = useState<Property[]>([]);
   const [loadingForSale, setLoadingForSale] = useState<boolean>(false);
   const [loadingForRent, setLoadingForRent] = useState<boolean>(true);
-  const [type, setType] = useState<string>('Para alugar');
+  const [type, setType] = useState<string>('Aluguel');
 
   useEffect(() => {
     handleSearchForRent();
   }, []);
 
   const handleSearchForRent = async () => {
-    setType('Para alugar');
+    setType('Aluguel');
     setLoadingForRent(true);
-    const list = await getListData(type);
-    await sleep(400);
-    setList(list);
+    handleSearch();
     setLoadingForRent(false);
   };
   const handleSearchForSale = async () => {
-    setType('Para comprar');
+    setType('Venda');
     setLoadingForSale(true);
-    const list = await getListData(type);
-    await sleep(400);
-    setList(list);
+    handleSearch();
     setLoadingForSale(false);
+  };
+
+  const handleSearch = async () => {
+    const list = await getListData(type, '');
+    setList(list);
   };
 
   return (
@@ -59,7 +60,7 @@ const ListCard: React.FC = () => {
           Carregando...
         </Box>
       ) : (
-        <Box display="flex" flexWrap="wrap">
+        <Box display="flex" flexWrap="wrap" justifyContent="center">
           {list.map((item) => (
             <PropertyCard {...item} key={item.id} />
           ))}

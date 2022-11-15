@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { NewProperty } from '../../../domain/property';
 import { getPropertiesByType, postProperty, putProperty } from './../../../domain/lib/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const property = req.body;
+    const property: NewProperty = req.body;
 
     const newProperty = await postProperty(property);
 
@@ -32,16 +33,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'GET') {
-    const type = req.query['type'];
+    const type = req.query['type']?.toString();
+    const filter = req.query['filter']?.toString();
 
-    const properties = await getPropertiesByType(type.toString());
+    const properties = await getPropertiesByType(type);
 
     if (!properties) {
       res.status(200).json([]);
       return;
     }
 
-    res.status(200).json(properties);
+    res
+      .status(200)
+      .json(
+        properties.filter(
+          (property) =>
+            filter === '' ||
+            filter === null ||
+            filter === undefined ||
+            property.amenities?.some((a) => a.name.match(filter)) ||
+            property.description.includes(filter) ||
+            property.address.includes(filter) ||
+            property.city.includes(filter) ||
+            property.state.includes(filter) ||
+            property.name.includes(filter),
+        ),
+      );
     return;
   }
 
