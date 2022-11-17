@@ -16,8 +16,6 @@ export class Lease extends BaseEntity {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
-  @Column({ unique: true })
-  propertyId: number;
   @Column()
   rent: number;
   @Column()

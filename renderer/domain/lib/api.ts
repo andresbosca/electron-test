@@ -12,9 +12,16 @@ const getPropertyById = async (id: number) => {
 
 const getPropertiesByType = async (type: string) => {
   const manager = await getManager();
-  const properties = await manager
-    .getRepository(Property)
-    .find({ loadRelationIds: true, where: { type } });
+  const properties = await manager.getRepository(Property).find({
+    where: { type },
+    relations: {
+      amenities: true,
+      leaseValue: true,
+      sellValue: true,
+    },
+  });
+
+  console.log(properties);
 
   return properties;
 };

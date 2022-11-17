@@ -55,12 +55,17 @@ export class Property extends BaseEntity implements NewProperty {
   @Column()
   dateAdded: Date;
   @OneToOne(() => Lease, { cascade: true })
-  @JoinColumn({ name: 'id', referencedColumnName: 'propertyId' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_property_lease_id',
+    referencedColumnName: 'id',
+  })
   leaseValue?: LeaseValue;
   @OneToOne(() => Sell, { cascade: true })
-  @JoinColumn({ name: 'id', referencedColumnName: 'propertyId' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_property_sell_id',
+    referencedColumnName: 'id',
+  })
   sellValue?: SellValue;
-  @OneToMany(() => Amenities, (amenity) => amenity.id, { cascade: true })
-  @JoinColumn({ name: 'id', referencedColumnName: 'propertyId' })
+  @OneToMany(() => Amenities, (amenity) => amenity.property, { cascade: true })
   amenities: Amenity[];
 }

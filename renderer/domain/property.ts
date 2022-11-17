@@ -50,7 +50,7 @@ interface LeaseValue {
 }
 
 interface SellValue {
-  totalValue: string;
+  value: string;
   securityDeposit: string;
 }
 
@@ -89,7 +89,7 @@ const INITIAL_LEASE_VALUE: LeaseValue = {
 };
 
 const INITIAL_SELL_VALUE: SellValue = {
-  totalValue: '0',
+  value: '0',
   securityDeposit: '0',
 };
 

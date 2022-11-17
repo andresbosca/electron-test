@@ -18,6 +18,8 @@ import Head from 'next/head';
 import router from 'next/router';
 import { useState } from 'react';
 import {
+  FaAirbnb,
+  FaCamera,
   FaDollarSign,
   FaFileInvoiceDollar,
   FaHouseUser,
@@ -54,7 +56,7 @@ const NewProperty: React.FC = () => {
   const [amenitiesState, setAmenitiesState] = useState<Amenity[]>(amenities);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [leaseState, setLeaseState] = useState(false);
-  const [radioValue, setRadioValue] = useState<string>('');
+  const [radioValue, setRadioValue] = useState<string>('Venda');
 
   const handleSubmit = () => {
     if (validateForm()) {
@@ -62,8 +64,8 @@ const NewProperty: React.FC = () => {
         ...property,
         type: radioValue,
         sellValue: {
-          totalValue: (
-            Number.parseFloat(property.sellValue?.totalValue?.replace(/\D/g, '')) / 100
+          value: (
+            Number.parseFloat(property.sellValue?.value?.replace(/\D/g, '')) / 100
           ).toString(),
           securityDeposit: (
             Number.parseFloat(property.sellValue?.securityDeposit?.replace(/\D/g, '')) / 100
@@ -520,7 +522,7 @@ const NewProperty: React.FC = () => {
                         style: 'currency',
                         currency: 'BRL',
                       }).format(
-                        Number.parseFloat(property.sellValue?.totalValue?.replace(/\D/g, '')) / 100,
+                        Number.parseFloat(property.sellValue?.value?.replace(/\D/g, '')) / 100,
                       )}
                       placeholder="Aluguel"
                       _placeholder={{ color: 'gray.500' }}
@@ -528,7 +530,7 @@ const NewProperty: React.FC = () => {
                         setProperty((state) => {
                           return {
                             ...state,
-                            sellValue: { ...state.sellValue, totalValue: e.target.value },
+                            sellValue: { ...state.sellValue, value: e.target.value },
                           };
                         })
                       }
@@ -582,9 +584,9 @@ const NewProperty: React.FC = () => {
               </Text>
             </GridItem>
 
-            {amenitiesState.map((amenity) => {
+            {amenitiesState.map((amenity, index) => {
               return (
-                <GridItem colSpan={3} overflow="hidden">
+                <GridItem key={index} colSpan={3} overflow="hidden">
                   <Checkbox
                     width="sm"
                     colorScheme="green"
@@ -595,7 +597,7 @@ const NewProperty: React.FC = () => {
                       setAmenitiesState((state) => {
                         return state.map((item) => {
                           if (item.name === amenity.name) {
-                            return { ...item, checked: e.target.checked };
+                            return { ...item, value: e.target.checked };
                           }
                           return item;
                         });
@@ -607,6 +609,42 @@ const NewProperty: React.FC = () => {
                 </GridItem>
               );
             })}
+          </Grid>
+          <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
+          <Grid h="240px" templateRows="repeat(2,1fr)" templateColumns="repeat(18, 1fr)" gap={4}>
+            <GridItem rowSpan={6} colSpan={6} textAlign="left">
+              <Box width="min-content">
+                <FaCamera fontSize="50px" />
+              </Box>
+              <Text fontSize="2xl" flex="1">
+                Sobre o imóvel
+              </Text>
+            </GridItem>
+            <GridItem colSpan={12}>
+              <Text fontSize="md" flex="1">
+                Imagem principal do imóvel
+              </Text>
+            </GridItem>
+            <GridItem colSpan={12}>
+              <InputGroup>
+                <Input
+                  bg="gray.100"
+                  variant="flushed"
+                  type="image"
+                  value={property.imageUrl}
+                  placeholder="Aluguel"
+                  _placeholder={{ color: 'gray.500' }}
+                  onChange={(e) =>
+                    setProperty((state) => {
+                      return {
+                        ...state,
+                        imageUrl: e.target.value,
+                      };
+                    })
+                  }
+                />
+              </InputGroup>
+            </GridItem>
           </Grid>
         </Box>
         <Button marginBottom="5" colorScheme="green" variant="solid" onClick={handleSubmit}>

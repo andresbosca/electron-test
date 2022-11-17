@@ -16,8 +16,6 @@ export class Sell extends BaseEntity {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
-  @Column({ unique: true })
-  propertyId: number;
   @Column()
   value: number;
   @Column()

@@ -31,7 +31,13 @@ const ListCard: React.FC = () => {
 
   const handleSearch = async () => {
     const list = await getListData(type, '');
-    setList(list);
+    const finalList = list.map((item) => {
+      return {
+        ...item,
+        price: Number(item.sellValue ? item.sellValue.value : item.leaseValue.rent),
+      };
+    });
+    setList(finalList);
   };
 
   return (

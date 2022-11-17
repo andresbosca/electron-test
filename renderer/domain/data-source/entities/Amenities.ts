@@ -3,10 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Property } from './Property';
 
 @Entity()
 export class Amenities extends BaseEntity {
@@ -14,8 +16,8 @@ export class Amenities extends BaseEntity {
   id: number;
   @CreateDateColumn()
   createdAt: Date;
-  @Column({ unique: true })
-  propertyId: number;
+  @ManyToOne(() => Property, (property) => property.amenities)
+  property: number;
   @Column()
   name: string;
 }

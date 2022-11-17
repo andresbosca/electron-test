@@ -5,7 +5,9 @@ import { Property } from '../../domain/property';
 import { subDays } from 'date-fns';
 import router from 'next/router';
 
-interface PropertyCardProps extends Property {}
+interface PropertyCardProps extends Property {
+  type: string;
+}
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
   id,
@@ -80,7 +82,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         <Box>
           {formattedPrice}
           <Box as="span" color="gray.600" fontSize="sm">
-            / dia
+            {type === 'Aluguel' ? '/dia' : ''}
           </Box>
           <Button
             colorScheme="teal"
