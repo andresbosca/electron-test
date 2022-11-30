@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 import Head from 'next/head';
 import router from 'next/router';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   FaAirbnb,
   FaCamera,
@@ -58,38 +58,50 @@ const NewProperty: React.FC = () => {
   const [leaseState, setLeaseState] = useState(false);
   const [radioValue, setRadioValue] = useState<string>('Venda');
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (validateForm()) {
-      const propertyToSave: NewProperty = {
+      const leaseRentValue = Number.parseFloat(property.leaseValue?.rent?.replace(/\D/g, '')) / 100;
+      const leaseSecurityDeposit =
+        Number.parseFloat(property.leaseValue?.securityDeposit?.replace(/\D/g, '')) / 100;
+      const sellValuePrice = Number.parseFloat(property.sellValue?.value.replace(/\D/g, '')) / 100;
+      const sellSecurityDeposit =
+        Number.parseFloat(property.sellValue?.securityDeposit.replace(/\D/g, '')) / 100;
+
+      const sellValue = {
+        value: sellValuePrice.toString(),
+        securityDeposit: sellSecurityDeposit.toString(),
+      };
+      const leaseValue = {
+        rent: leaseRentValue.toString(),
+        securityDeposit: leaseSecurityDeposit.toString(),
+        leaseDuration: property.leaseValue?.leaseDuration,
+      };
+      var newPropertyWithValues = {
         ...property,
+        sellValue: sellValue,
+        leaseValue: leaseValue,
+      };
+
+      if (radioValue === 'Venda') {
+        newPropertyWithValues.leaseValue = null;
+      } else {
+        newPropertyWithValues.sellValue = null;
+      }
+
+      const propertyToSave: NewProperty = {
+        ...newPropertyWithValues,
         type: radioValue,
-        sellValue: {
-          value: (
-            Number.parseFloat(property.sellValue?.value?.replace(/\D/g, '')) / 100
-          ).toString(),
-          securityDeposit: (
-            Number.parseFloat(property.sellValue?.securityDeposit?.replace(/\D/g, '')) / 100
-          ).toString(),
-        },
-        leaseValue: {
-          rent: (Number.parseFloat(property.leaseValue?.rent?.replace(/\D/g, '')) / 100).toString(),
-          securityDeposit: (
-            Number.parseFloat(property.leaseValue?.securityDeposit?.replace(/\D/g, '')) / 100
-          ).toString(),
-          leaseDuration: property.leaseValue?.leaseDuration,
-        },
         imageUrl: 'https://bit.ly/2Z4KKcF',
         imageAlt: 'Rear view of modern home with pool',
         amenities: amenitiesState.filter((amenity) => amenity.value),
+        price: radioValue === 'Venda' ? sellValuePrice : leaseRentValue,
       };
-      console.log(propertyToSave);
       axios.post('/api/property', propertyToSave).then((res) => {
-        console.log(res);
         router.push('/home');
       });
     }
     setButtonPressed(true);
-  };
+  }, [property, amenitiesState, radioValue]);
 
   const handleRadioChange = (value: string) => {
     setRadioValue(value);
@@ -107,13 +119,18 @@ const NewProperty: React.FC = () => {
 
   const group = getRootProps();
 
-  const isStateValid =
-    brazilStates.map((state) => state.abbreviation).includes(property.state) ||
-    brazilStates.map((state) => state.name).includes(property.state);
+  const isStateValid = useMemo(() => {
+    return (
+      brazilStates.map((state) => state.abbreviation).includes(property.state) ||
+      brazilStates.map((state) => state.name).includes(property.state)
+    );
+  }, [property.state]);
 
-  const isZipValid = property.zip.length === 9 && property.zip.includes('-');
+  const isZipValid = useMemo(() => {
+    return property.zip.length === 9 && property.zip.includes('-');
+  }, [property.zip]);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     if (
       property.name === '' ||
       property.address === '' ||
@@ -125,7 +142,7 @@ const NewProperty: React.FC = () => {
     }
 
     return true;
-  };
+  }, [property, isStateValid, isZipValid]);
 
   return (
     <SidebarWithHeader>

@@ -8,7 +8,7 @@ import { Sell } from './entities/Sell';
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: 'localhost',
-  port: 9876, //5432,
+  port: 5432,
   username: 'postgres',
   password: 'teste123',
   database: 'real-state',

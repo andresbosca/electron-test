@@ -16,9 +16,9 @@ export class Lease extends BaseEntity {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   rent: number;
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   securityDeposit: number;
   @Column()
   leaseDuration: number;

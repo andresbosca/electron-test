@@ -16,8 +16,8 @@ export class Sell extends BaseEntity {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   value: number;
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   securityDeposit: number;
 }
