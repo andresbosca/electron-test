@@ -15,10 +15,10 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Head from 'next/head';
+import Image from 'next/image';
 import router from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  FaAirbnb,
   FaCamera,
   FaDollarSign,
   FaFileInvoiceDollar,
@@ -30,16 +30,7 @@ import Categories from '../components/Categories/Categories';
 import SidebarWithHeader from '../components/SideBar';
 import brazilStates from '../domain/brazilStates';
 import formatCep from '../domain/cepFormatter';
-import {
-  amenities,
-  Amenity,
-  INITIAL_LEASE_VALUE,
-  INITITAL_STATE,
-  LeaseValue,
-  NewProperty,
-  Property,
-  SellValue,
-} from '../domain/property';
+import { amenities, Amenity, INITITAL_STATE, NewProperty } from '../domain/property';
 
 interface Option {
   value: string;
@@ -91,12 +82,21 @@ const NewProperty: React.FC = () => {
       const propertyToSave: NewProperty = {
         ...newPropertyWithValues,
         type: radioValue,
-        imageUrl: 'https://bit.ly/2Z4KKcF',
-        imageAlt: 'Rear view of modern home with pool',
+        imageAlt: '',
         amenities: amenitiesState.filter((amenity) => amenity.value),
         price: radioValue === 'Venda' ? sellValuePrice : leaseRentValue,
+        images: [
+          {
+            url: property.imageUrl,
+            alt: '',
+          },
+          {
+            url: 'https://bit.ly/2Z4KKcF',
+            alt: '',
+          },
+        ],
       };
-      axios.post('/api/property', propertyToSave).then((res) => {
+      axios.post('/api/property', propertyToSave).then(() => {
         router.push('/home');
       });
     }
@@ -628,7 +628,7 @@ const NewProperty: React.FC = () => {
             })}
           </Grid>
           <Box h="3px" bg={'blackAlpha.100'} marginBottom="8" marginTop="8" />
-          <Grid h="240px" templateRows="repeat(2,1fr)" templateColumns="repeat(18, 1fr)" gap={4}>
+          <Grid h="360px" templateRows="repeat(2,1fr)" templateColumns="repeat(18, 1fr)" gap={4}>
             <GridItem rowSpan={6} colSpan={6} textAlign="left">
               <Box width="min-content">
                 <FaCamera fontSize="50px" />
@@ -636,6 +636,31 @@ const NewProperty: React.FC = () => {
               <Text fontSize="2xl" flex="1">
                 Sobre o imóvel
               </Text>
+            </GridItem>
+            <GridItem colSpan={12}>
+              <Text fontSize="md" flex="1">
+                Descrição do imóvel
+              </Text>
+            </GridItem>
+            <GridItem colSpan={12}>
+              <InputGroup>
+                <Input
+                  bg="gray.100"
+                  variant="flushed"
+                  value={property.description}
+                  placeholder="Descrição do imóvel"
+                  borderRadius={'md'}
+                  _placeholder={{ color: 'gray.500', paddingLeft: '2' }}
+                  onChange={(e) =>
+                    setProperty((state) => {
+                      return {
+                        ...state,
+                        description: e.target.value,
+                      };
+                    })
+                  }
+                />
+              </InputGroup>
             </GridItem>
             <GridItem colSpan={12}>
               <Text fontSize="md" flex="1">
@@ -647,10 +672,10 @@ const NewProperty: React.FC = () => {
                 <Input
                   bg="gray.100"
                   variant="flushed"
-                  type="image"
                   value={property.imageUrl}
-                  placeholder="Aluguel"
-                  _placeholder={{ color: 'gray.500' }}
+                  placeholder="Link para a imagem"
+                  borderRadius={'md'}
+                  _placeholder={{ color: 'gray.500', paddingLeft: '2' }}
                   onChange={(e) =>
                     setProperty((state) => {
                       return {
@@ -661,6 +686,14 @@ const NewProperty: React.FC = () => {
                   }
                 />
               </InputGroup>
+              <Box p={'2'} alignContent="start">
+                <Image
+                  style={{ borderRadius: '6px' }}
+                  src={property.imageUrl ?? 'https://bit.ly/2Z4KKcF'}
+                  height={'200px'}
+                  width={'200px'}
+                />
+              </Box>
             </GridItem>
           </Grid>
         </Box>

@@ -1,11 +1,18 @@
-import { Amenities } from '../data-source/entities/Amenities';
 import { Property } from '../data-source/entities/Property';
 import { NewProperty } from '../property';
 import { getManager } from './getManager';
 
 const getPropertyById = async (id: number) => {
   const manager = await getManager();
-  const property = await manager.getRepository(Property).findOne({ where: { id: id } });
+  const property = await manager.getRepository(Property).findOne({
+    where: { id: id },
+    relations: {
+      amenities: true,
+      leaseValue: true,
+      sellValue: true,
+      images: true,
+    },
+  });
 
   return property;
 };
@@ -18,6 +25,7 @@ const getPropertiesByType = async (type: string) => {
       amenities: true,
       leaseValue: true,
       sellValue: true,
+      images: true,
     },
   });
 

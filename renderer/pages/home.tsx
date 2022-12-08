@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   return (
     <SidebarWithHeader>
       <Head>
-        <title>Home - </title>
+        <title>Home - Buscar imóvel</title>
       </Head>
       <HomeList />
     </SidebarWithHeader>

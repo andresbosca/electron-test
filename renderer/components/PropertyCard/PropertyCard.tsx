@@ -1,9 +1,9 @@
 import { Badge, Box, Button } from '@chakra-ui/react';
+import { subDays } from 'date-fns';
 import Image from 'next/image';
+import router from 'next/router';
 import React from 'react';
 import { Property } from '../../domain/property';
-import { subDays } from 'date-fns';
-import router from 'next/router';
 
 interface PropertyCardProps extends Property {
   type: string;

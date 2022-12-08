@@ -1,5 +1,5 @@
-import { Box, Button, Container, Grid, Stack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Box, Button, Container, Grid, Input, Stack } from '@chakra-ui/react';
+import { useCallback, useEffect, useState } from 'react';
 import { getListData } from '../../domain/getListData';
 import { Property } from '../../domain/property';
 import PropertyCard from '../PropertyCard/PropertyCard';
@@ -8,6 +8,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const ListCard: React.FC = () => {
   const [list, setList] = useState<Property[]>([]);
+  const [search, setSearch] = useState<string>('');
   const [loadingForSale, setLoadingForSale] = useState<boolean>(false);
   const [loadingForRent, setLoadingForRent] = useState<boolean>(true);
   const [type, setType] = useState<string>('Aluguel');
@@ -29,8 +30,8 @@ const ListCard: React.FC = () => {
     setLoadingForSale(false);
   };
 
-  const handleSearch = async () => {
-    const list = await getListData(type, '');
+  const handleSearch = useCallback(async () => {
+    const list = await getListData(type, search);
     const finalList = list.map((item) => {
       return {
         ...item,
@@ -38,11 +39,20 @@ const ListCard: React.FC = () => {
       };
     });
     setList(finalList);
-  };
+  }, [type, setList, getListData]);
 
   return (
     <Container borderWidth="1px" maxW="container.xl" backgroundColor="gray.200" borderRadius="lg">
       <Stack justifyContent="center" direction="row" spacing={4} mt={5}>
+        <Input
+          bg={'blackAlpha.100'}
+          placeholder="Pesquisar"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            handleSearch();
+          }}
+        />
         <Button
           isLoading={loadingForRent}
           colorScheme="blue"

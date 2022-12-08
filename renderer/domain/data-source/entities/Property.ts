@@ -12,6 +12,7 @@ import {
 import { Amenity, LeaseValue, NewProperty, SellValue } from '../../property';
 import { Amenities } from './Amenities';
 import { Lease } from './Lease';
+import { PropertyImage } from './PropertyImage';
 import { Sell } from './Sell';
 
 @Entity()
@@ -68,4 +69,6 @@ export class Property extends BaseEntity implements NewProperty {
   sellValue?: SellValue;
   @OneToMany(() => Amenities, (amenity) => amenity.property, { cascade: true })
   amenities: Amenity[];
+  @OneToMany(() => PropertyImage, (image) => image.property, { cascade: true })
+  images: PropertyImage[];
 }

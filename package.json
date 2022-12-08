@@ -30,7 +30,8 @@
       "react-icons": "^4.4.0",
       "styled-components": "^5.3.5",
       "typeorm": "0.3.10",
-      "reflect-metadata": "^0.1.13"
+      "reflect-metadata": "^0.1.13",
+      "react-responsive-carousel": "3.2.18"
    },
    "devDependencies": {
       "@types/node": "^16.11.10",

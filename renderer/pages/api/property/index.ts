@@ -7,16 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
       const property: NewProperty = req.body;
 
-      console.log(property.sellValue);
-
-      if (property.sellValue.value === '0' && property.sellValue.securityDeposit === '0') {
-        property.sellValue = null;
-      }
-
-      if (property.leaseValue.rent === '0' && property.leaseValue.securityDeposit === '0') {
-        property.leaseValue = null;
-      }
-
       const newProperty = await postProperty(property);
 
       if (!newProperty) {

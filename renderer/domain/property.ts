@@ -18,6 +18,7 @@ interface NewProperty {
   leaseValue?: LeaseValue;
   sellValue?: SellValue;
   amenities: Amenity[];
+  images: PropertyImage[];
 }
 
 interface Property {
@@ -41,6 +42,7 @@ interface Property {
   leaseValue?: LeaseValue;
   sellValue?: SellValue;
   amenities: Amenity[];
+  images: PropertyImage[];
 }
 
 interface LeaseValue {
@@ -57,6 +59,12 @@ interface SellValue {
 interface Amenity {
   name: string;
   value: boolean;
+}
+
+interface PropertyImage {
+  url?: string;
+  alt?: string;
+  base64?: string;
 }
 
 const AMENITIES: Amenity[] = [
@@ -113,8 +121,8 @@ const INITITAL_STATE: NewProperty = {
   leaseValue: INITIAL_LEASE_VALUE,
   sellValue: INITIAL_SELL_VALUE,
   amenities: AMENITIES,
+  images: [],
 };
 
 export { INITITAL_STATE, INITIAL_LEASE_VALUE, INITIAL_SELL_VALUE, AMENITIES as amenities };
-
 export type { NewProperty, Property, LeaseValue, SellValue, Amenity };
